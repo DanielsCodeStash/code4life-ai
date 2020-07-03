@@ -4,6 +4,7 @@ fun main() {
 
     var playerHasSample = false
     var playerHasMoleculesNeeded = false
+    var playerSampleDiagnosed = false
 
 
     val input = Scanner(System.`in`)
@@ -32,7 +33,9 @@ fun main() {
         if (!playerHasSample) {
             debug("GETTING SAMPLES!")
             getSample(ownPlayer, sampleList)
-        } else if (!playerHasMoleculesNeeded) {
+        } else i
+
+        else if (!playerHasMoleculesNeeded) {
             debug("GETTING MOLECULES!")
             getMolecules(ownPlayer, sampleList)
         } else {
@@ -51,9 +54,9 @@ fun dumpInLab(ownPlayer: Player, sampleList: List<Sample>) {
 }
 
 fun getSample(ownPlayer: Player, samples: List<Sample>) {
-    if (ownPlayer.location != Location.DIAGNOSIS) {
-        goto(Location.DIAGNOSIS)
-    } else if (ownPlayer.location == Location.DIAGNOSIS) {
+    if (ownPlayer.location != Location.SAMPLES) {
+        goto(Location.SAMPLES)
+    } else if (ownPlayer.location == Location.SAMPLES) {
         println("CONNECT " + getSampleWithMostHealth(samples).sampleId)
     }
 }
