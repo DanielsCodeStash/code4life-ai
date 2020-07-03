@@ -2,10 +2,12 @@ import java.util.*
 
 fun main() {
 
+    val debug = true
+
     var playerHasSample = false
     var playerHasMoleculesNeeded = false
     var playerSampleDiagnosed = false
-
+    var activeSampleId = -1
 
     val input = Scanner(System.`in`)
 
@@ -21,9 +23,11 @@ fun main() {
         val sampleList = readSamples(input)
 
         // debug
-//        debug(ownPlayer.toString())
-//        debug(enemyPlayer.toString())
-//        sampleList.forEach { debug(it.toString()) }
+        if(debug) {
+            debug(ownPlayer.toString())
+            debug(enemyPlayer.toString())
+            sampleList.forEach { debug(it.toString()) }
+        }
 
         // prepare
         playerHasSample = playerHasSample(sampleList)
@@ -31,39 +35,61 @@ fun main() {
 
         // go
         if (!playerHasSample) {
-            debug("GETTING SAMPLES!")
+            if(listOf("A", "B", "C", "D", "E").filter { ownPlayer.getStorageOfType(it) != 0 }.isNotEmpty()) {
+                println("WHHHAAAT")
+            }
+            debug("GETTING SAMPLE!")
             getSample(ownPlayer, sampleList)
-        } else i
-
-        else if (!playerHasMoleculesNeeded) {
+        } else if(!playerSampleDiagnosed) {
+            debug("DIAGNOSING SAMPLE!")
+            val diagnosed = diagnoseSample(ownPlayer, sampleList, playerSampleDiagnosed)
+            if(diagnosed) {
+                playerSampleDiagnosed = true
+            }
+        } else if (!playerHasMoleculesNeeded) {
             debug("GETTING MOLECULES!")
             getMolecules(ownPlayer, sampleList)
         } else {
             debug("DUMPING IN LAB!")
-            dumpInLab(ownPlayer, sampleList)
+            val dumped = dumpInLab(ownPlayer, sampleList)
+            if(dumped) {
+                playerSampleDiagnosed = false
+            }
         }
     }
 }
 
-fun dumpInLab(ownPlayer: Player, sampleList: List<Sample>) {
+fun diagnoseSample(ownPlayer: Player, sampleList: List<Sample>, playerSampleDiagnosed: Boolean): Boolean {
+    if(ownPlayer.location != Location.DIAGNOSIS) {
+        goto(Location.DIAGNOSIS)
+    } else if (!playerSampleDiagnosed)  {
+        println("CONNECT " + getPlayerCarriedSample(ownPlayer, sampleList).sampleId)
+        return true
+    }
+    return false
+}
+
+fun dumpInLab(ownPlayer: Player, sampleList: List<Sample>): Boolean {
     if (ownPlayer.location != Location.LABORATORY) {
         goto(Location.LABORATORY)
     } else if (ownPlayer.location == Location.LABORATORY) {
         println("CONNECT " + getPlayerCarriedSample(ownPlayer, sampleList).sampleId)
+        return true
     }
+    return false
 }
 
 fun getSample(ownPlayer: Player, samples: List<Sample>) {
     if (ownPlayer.location != Location.SAMPLES) {
         goto(Location.SAMPLES)
     } else if (ownPlayer.location == Location.SAMPLES) {
-        println("CONNECT " + getSampleWithMostHealth(samples).sampleId)
+        println("CONNECT 2")
     }
 }
 
 fun getSampleWithMostHealth(samples: List<Sample>): Sample {
     return samples
-            .filter { it.carriedBy == -1 }
+            .filter { it.carriedBy == Carrier.ME }
             .maxBy { it.health }!!
 }
 
@@ -76,7 +102,7 @@ fun getMolecules(ownPlayer: Player, samples: List<Sample>) {
 }
 
 fun playerHasSample(samples: List<Sample>): Boolean {
-    return samples.any { it.carriedBy == 0 }
+    return samples.any { it.carriedBy == Carrier.ME }
 }
 
 fun playerHasMoleculesNeeded(player: Player, samples: List<Sample>): Boolean {
@@ -108,7 +134,7 @@ fun playerHasMoleculesNeedOfType(player: Player, samples: List<Sample>, type: St
 }
 
 fun getPlayerCarriedSample(player: Player, sampleList: List<Sample>): Sample {
-    return sampleList.first { it.carriedBy == 0 }
+    return sampleList.first { it.carriedBy == Carrier.ME }
 }
 
 

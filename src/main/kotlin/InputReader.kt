@@ -53,10 +53,14 @@ fun readSamples(input: Scanner): List<Sample> {
 }
 
 fun readSample(input: Scanner): Sample {
-    var sample = Sample()
+    val sample = Sample()
 
     sample.sampleId = input.nextInt()
-    sample.carriedBy = input.nextInt()
+    when(input.nextInt()) {
+        -1 -> sample.carriedBy = Carrier.CLOUD
+        0 -> sample.carriedBy = Carrier.ME
+        1 -> sample.carriedBy = Carrier.ENEMY
+    }
     sample.rank = input.nextInt()
     sample.expertiseGain = input.next()
     sample.health = input.nextInt()

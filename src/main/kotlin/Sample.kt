@@ -3,7 +3,7 @@ import java.lang.RuntimeException
 data class Sample(
 
         var sampleId: Int = -1,
-        var carriedBy: Int = -1,
+        var carriedBy: Carrier = Carrier.CLOUD,
         var rank: Int = -1,
         var expertiseGain: String = "",
         var health: Int = -1,

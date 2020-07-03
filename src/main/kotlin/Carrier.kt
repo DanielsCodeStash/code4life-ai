@@ -1,0 +1,1 @@
+enum class Carrier {ME, ENEMY, CLOUD}
