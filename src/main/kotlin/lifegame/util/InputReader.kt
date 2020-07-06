@@ -1,4 +1,4 @@
-package lifegame
+package lifegame.util
 
 import lifegame.container.Location
 import lifegame.container.Player
