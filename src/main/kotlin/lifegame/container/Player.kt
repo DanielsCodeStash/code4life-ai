@@ -2,8 +2,7 @@ package lifegame.container
 
 import java.lang.RuntimeException
 
-// trying a builder thing, so verbose!
-data class Player private constructor(
+data class Player private constructor (
         val location: Location,
         val eta: Int,
         val scoreHealth: Int,

@@ -1,6 +1,5 @@
 package lifegame
 
-import lifegame.container.Carrier
 import lifegame.container.Location
 import lifegame.container.Player
 import lifegame.container.Sample
@@ -58,22 +57,17 @@ fun readSamples(input: Scanner): List<Sample> {
 }
 
 fun readSample(input: Scanner): Sample {
-    val sample = Sample()
 
-    sample.sampleId = input.nextInt()
-    when(input.nextInt()) {
-        -1 -> sample.carriedBy = Carrier.CLOUD
-        0 -> sample.carriedBy = Carrier.ME
-        1 -> sample.carriedBy = Carrier.ENEMY
-    }
-    sample.rank = input.nextInt()
-    sample.expertiseGain = input.next()
-    sample.health = input.nextInt()
-    sample.costA = input.nextInt()
-    sample.costB = input.nextInt()
-    sample.costC = input.nextInt()
-    sample.costD = input.nextInt()
-    sample.costE = input.nextInt()
-
-    return sample
+    return Sample.Builder()
+            .sampleId(input.nextInt())
+            .carriedBy(input.nextInt())
+            .rank(input.nextInt())
+            .expertiseGain(input.next())
+            .health(input.nextInt())
+            .costA(input.nextInt())
+            .costB(input.nextInt())
+            .costC(input.nextInt())
+            .costD(input.nextInt())
+            .costC(input.nextInt())
+            .build()
 }
