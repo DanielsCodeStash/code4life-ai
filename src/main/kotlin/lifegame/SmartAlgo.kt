@@ -21,17 +21,21 @@ class SmartAlgo {
         playerHasSample = playerHasSample()
         playerHasMoleculesNeeded = playerHasMoleculesNeeded()
 
-        if (!playerHasSample) {
-            return getSample()
+        if(state.me.eta != 0) {
+            return Action(ActionType.WAIT)
+        }
+
+        return if (!playerHasSample) {
+            getSample()
 
         } else if(!playerSampleDiagnosed) {
-            return diagnoseSample()
+            diagnoseSample()
 
         } else if (!playerHasMoleculesNeeded) {
-            return getMolecules()
+            getMolecules()
 
         } else {
-            return  dumpInLab()
+            dumpInLab()
 
         }
     }

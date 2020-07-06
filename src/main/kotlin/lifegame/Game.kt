@@ -2,6 +2,7 @@ package lifegame
 
 import lifegame.container.*
 import lifegame.util.*
+import java.lang.RuntimeException
 import java.util.*
 
 fun main() {
@@ -9,11 +10,16 @@ fun main() {
     val printDebug = true
     val input = Scanner(System.`in`)
     val smartAlgo = SmartAlgo()
+    var roundNum = 0;
 
     readProjects(input)
 
     // game loop
     while (true) {
+        roundNum++
+//        if(roundNum >= 10) {
+//            throw RuntimeException()
+//        }
 
         // read
         val roundState = readRoundState(input)
