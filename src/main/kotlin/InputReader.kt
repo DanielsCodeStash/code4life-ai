@@ -1,23 +1,22 @@
 import java.util.*
 
 fun readPlayer(input: Scanner): Player {
-    val p = Player()
 
-    p.location = Location.valueOf(input.next())
-    p.eta = input.nextInt()
-    p.scoreHealth = input.nextInt()
-    p.storageA = input.nextInt()
-    p.storageB = input.nextInt()
-    p.storageC = input.nextInt()
-    p.storageD = input.nextInt()
-    p.storageE = input.nextInt()
-    p.expertiseA = input.nextInt()
-    p.expertiseB = input.nextInt()
-    p.expertiseC = input.nextInt()
-    p.expertiseD = input.nextInt()
-    p.expertiseE= input.nextInt()
-
-    return p
+    return Player.Builder()
+            .location(Location.valueOf(input.next()))
+            .eta(input.nextInt())
+            .scoreHealth(input.nextInt())
+            .storageA(input.nextInt())
+            .storageB(input.nextInt())
+            .storageC(input.nextInt())
+            .storageD(input.nextInt())
+            .storageE(input.nextInt())
+            .expertiseA(input.nextInt())
+            .expertiseB(input.nextInt())
+            .expertiseC(input.nextInt())
+            .expertiseD(input.nextInt())
+            .expertiseE(input.nextInt())
+            .build()
 }
 
 fun readProjects(input: Scanner) {
