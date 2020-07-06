@@ -1,3 +1,5 @@
 package lifegame.container
 
-enum class ActionType {CONNECT, GOTO, WAIT}
+enum class ActionType {
+    CONNECT, GOTO, WAIT, NONE
+}

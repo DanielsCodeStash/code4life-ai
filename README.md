@@ -1,5 +1,8 @@
 # code4life-ai
 
+TODO:
+prio on just put in samples
+
 
 Possible actions:
 

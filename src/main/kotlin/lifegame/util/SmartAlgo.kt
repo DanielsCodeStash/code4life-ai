@@ -1,7 +1,6 @@
-package lifegame
+package lifegame.util
 
 import lifegame.container.*
-import lifegame.util.debug
 import java.lang.IllegalStateException
 
 class SmartAlgo {

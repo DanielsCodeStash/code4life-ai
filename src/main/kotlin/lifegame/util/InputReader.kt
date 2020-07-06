@@ -1,6 +1,7 @@
 package lifegame.util
 
 import lifegame.container.Location
+import lifegame.container.MoleculeStorage
 import lifegame.container.Player
 import lifegame.container.Sample
 import java.util.*
@@ -37,12 +38,8 @@ fun readProjects(input: Scanner) {
     }
 }
 
-fun readMoleculeAvailability(input: Scanner) {
-    val availableA = input.nextInt()
-    val availableB = input.nextInt()
-    val availableC = input.nextInt()
-    val availableD = input.nextInt()
-    val availableE = input.nextInt()
+fun readMoleculeStorage(input: Scanner): MoleculeStorage {
+    return MoleculeStorage(input.nextInt(), input.nextInt(), input.nextInt(), input.nextInt(), input.nextInt())
 }
 
 fun readSamples(input: Scanner): List<Sample> {

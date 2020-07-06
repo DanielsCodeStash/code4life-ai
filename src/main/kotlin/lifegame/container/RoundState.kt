@@ -3,5 +3,6 @@ package lifegame.container
 data class RoundState(
         val me: Player,
         val enemy: Player,
-        val samples: List<Sample>
+        val samples: List<Sample>,
+        val storage: MoleculeStorage
 )
