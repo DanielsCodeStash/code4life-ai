@@ -1,8 +1,16 @@
+package lifegame
+
+import lifegame.container.Carrier
+import lifegame.container.Location
+import lifegame.container.Player
+import lifegame.container.Sample
+import lifegame.util.debug
+import lifegame.util.goto
 import java.util.*
 
 fun main() {
 
-    val debug = true
+    val printDebug = true
 
     var playerHasSample = false
     var playerHasMoleculesNeeded = false
@@ -23,7 +31,7 @@ fun main() {
         val sampleList = readSamples(input)
 
         // debug
-        if(debug) {
+        if(printDebug) {
             debug(ownPlayer.toString())
             debug(enemyPlayer.toString())
             sampleList.forEach { debug(it.toString()) }
@@ -35,9 +43,6 @@ fun main() {
 
         // go
         if (!playerHasSample) {
-            if(listOf("A", "B", "C", "D", "E").filter { ownPlayer.getStorageOfType(it) != 0 }.isNotEmpty()) {
-                println("WHHHAAAT")
-            }
             debug("GETTING SAMPLE!")
             getSample(ownPlayer, sampleList)
         } else if(!playerSampleDiagnosed) {
@@ -127,8 +132,6 @@ fun playerHasMoleculesNeedOfType(player: Player, samples: List<Sample>, type: St
     val cost = sample.getCostOfType(type)
     val stored = player.getStorageOfType(type)
     val hasEnough = stored >= cost;
-
-    //debug("hasEnough $hasEnough of type $type cost: $cost stored: $stored" )
 
     return hasEnough
 }

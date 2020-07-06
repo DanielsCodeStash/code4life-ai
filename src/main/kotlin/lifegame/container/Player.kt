@@ -1,3 +1,5 @@
+package lifegame.container
+
 import java.lang.RuntimeException
 
 // trying a builder thing, so verbose!

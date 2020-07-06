@@ -1,7 +1,7 @@
 #!/bin/bash
 src_path=$1
 file_type=$2
-out_dir=$src_path/../out
+out_dir="./out"
 out_file=$out_dir/Out.$file_type
 
 # ensure out directory exists

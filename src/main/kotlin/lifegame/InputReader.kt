@@ -1,3 +1,9 @@
+package lifegame
+
+import lifegame.container.Carrier
+import lifegame.container.Location
+import lifegame.container.Player
+import lifegame.container.Sample
 import java.util.*
 
 fun readPlayer(input: Scanner): Player {
