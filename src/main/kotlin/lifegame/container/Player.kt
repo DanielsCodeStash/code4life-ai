@@ -59,5 +59,16 @@ data class Player private constructor (
         }
         throw RuntimeException("dh")
     }
+
+    fun getExpertizeOfType(type: String): Int {
+        when(type) {
+            "A" -> return expertiseA
+            "B" -> return expertiseB
+            "C" -> return expertiseC
+            "D" -> return expertiseD
+            "E" -> return expertiseE
+        }
+        throw RuntimeException("dh")
+    }
 }
 
