@@ -1,4 +1,4 @@
-package lifegame
+package lifegame.prio.base
 
 enum class PrioActionSubType {
 

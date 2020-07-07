@@ -1,6 +1,10 @@
 package lifegame
 
 import lifegame.container.*
+import lifegame.prio.base.PrioAction
+import lifegame.prio.base.PrioActionSubType
+import lifegame.prio.base.PrioActionType
+import lifegame.prio.prioritize
 import lifegame.util.debug
 import lifegame.util.getMoleculeTypes
 

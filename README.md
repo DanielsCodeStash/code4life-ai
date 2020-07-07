@@ -1,20 +1,9 @@
 # code4life-ai
 
-TODO:
-prio on just put in samples
-
-
-Possible actions:
-
-1. Getting new sample
-
-2. Getting individual molecules
-
-3. Diagnosing sample
-
-4. Completing sample
-
-5. Waiting/positioning for molecule 
+Getting molecules
+- get molecules we need a lot off
+- take molecules for high value contracts first, don't use them for low value contracts
+- take what we can then drop of at laborytory
 
 
 

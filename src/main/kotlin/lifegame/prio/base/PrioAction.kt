@@ -1,4 +1,4 @@
-package lifegame
+package lifegame.prio.base
 
 class PrioAction(
         val prioActionType: PrioActionType,
