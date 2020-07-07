@@ -7,16 +7,22 @@ import lifegame.util.getMoleculeTypes
 class PrioAlgo {
 
     // algo state
-    private val diagnosedSamples: MutableSet<Int> = mutableSetOf()
+    internal val diagnosedSamples: MutableSet<Int> = mutableSetOf()
     private var numCarriedSamples = 0
     private var numCarriedMolecules = 0
 
     // round state
     internal lateinit var state: RoundState
+    internal lateinit var lastRoundAction: Action
 
     fun getTurnAction(state: RoundState): Action {
 
         this.state = state
+
+        if (state.me.eta != 0) {
+            return lastRoundAction
+        }
+
         numCarriedMolecules = getMoleculeTypes()
                 .map { state.me.getStorageOfType(it) }
                 .sum()
@@ -33,37 +39,34 @@ class PrioAlgo {
 
         debug("Doing $actualAction")
 
+        lastRoundAction = actualAction
+
         return actualAction
     }
 
     private fun getActualAction(prioAction: PrioAction): Action {
         return when (prioAction.prioActionType) {
+
             PrioActionType.GET_NEW_SAMPLE -> gotoOrAct(Location.SAMPLES,
-                    Action(ActionType.CONNECT, prioAction.prioActionSubType.toRankString()),
-                    { numCarriedSamples += 1 }
-            )
+                    Action(ActionType.CONNECT, prioAction.prioActionSubType.toRankString())
+            ) { numCarriedSamples += 1 }
 
             PrioActionType.DIAGNOSE_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
-                    Action(ActionType.CONNECT, prioAction.sampleId),
-                    {
-                        numCarriedSamples -= 1
-                        diagnosedSamples.add(prioAction.sampleId)
-                    }
-
-            )
+                    Action(ActionType.CONNECT, prioAction.sampleId)
+            ) {
+                diagnosedSamples.add(prioAction.sampleId)
+            }
 
             PrioActionType.GET_MOLECULE -> gotoOrAct(Location.MOLECULES,
                     Action(ActionType.CONNECT, prioAction.prioActionSubType.toString())
             )
 
             PrioActionType.PRODUCE_MEDICINE -> gotoOrAct(Location.LABORATORY,
-                    Action(ActionType.CONNECT, prioAction.sampleId),
-                    { numCarriedSamples -= 1 }
-            )
+                    Action(ActionType.CONNECT, prioAction.sampleId)
+            ) { numCarriedSamples -= 1 }
 
             PrioActionType.GET_DIAGNOSED_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
-                    Action(ActionType.CONNECT, prioAction.sampleId),
-                    {numCarriedSamples += 1}
+                    Action(ActionType.CONNECT, prioAction.sampleId)
             )
 
             PrioActionType.WAIT -> Action(ActionType.WAIT)
@@ -115,20 +118,29 @@ class PrioAlgo {
                 .map { PrioAction(PrioActionType.DIAGNOSE_SAMPLE, it.sampleId) }
                 .toList()
 
-        val pickupDiagnosed = state.samples
-                .filter { it.carriedBy == Carrier.CLOUD }
-                .map { PrioAction(PrioActionType.GET_DIAGNOSED_SAMPLE, it.sampleId) }
-                .toList()
+        val pickupDiagnosed = if (numCarriedSamples < 3) {
+            state.samples
+                    .filter { it.carriedBy == Carrier.CLOUD }
+                    .map { PrioAction(PrioActionType.GET_DIAGNOSED_SAMPLE, it.sampleId) }
+                    .toList()
+        } else {
+            emptyList()
+        }
 
         val produceMedicine = state.samples
                 .filter { it.carriedBy == Carrier.ME }
                 .filter { diagnosedSamples.contains(it.sampleId) }
+                .filter { hasEnoughMoleculesForSample(it) }
                 .map { PrioAction(PrioActionType.PRODUCE_MEDICINE, it.sampleId) }
                 .toList()
 
         val others = listOf(PrioAction(PrioActionType.WAIT))
 
-        return listOf(getMolecules, getSamples, diagnoseSample, pickupDiagnosed, produceMedicine, others).flatten()
+        return listOf(getMolecules, getSamples, diagnoseSample, produceMedicine, others).flatten()
     }
+
+    private fun hasEnoughMoleculesForSample(sample: Sample) =
+            getMoleculeTypes().none { state.me.getStorageOfType(it) < sample.getCostOfType(it) }
+
 
 }

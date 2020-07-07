@@ -12,7 +12,7 @@ data class MoleculeStorage(
             "A" -> return A
             "B" -> return B
             "C" -> return C
-            "D" -> return E
+            "D" -> return D
             "E" -> return E
         }
         throw IllegalArgumentException(type)

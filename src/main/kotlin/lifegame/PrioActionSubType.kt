@@ -25,5 +25,16 @@ enum class PrioActionSubType {
             else -> throw IllegalArgumentException(this.toString())
         }
     }
+
+    fun toTypeString(): String {
+        return when(this){
+            A -> "A"
+            B -> "B"
+            C -> "C"
+            D -> "D"
+            E -> "E"
+            else -> throw IllegalArgumentException(this.toString())
+        }
+    }
 }
 

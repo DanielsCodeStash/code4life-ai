@@ -65,6 +65,6 @@ fun readSample(input: Scanner): Sample {
             .costB(input.nextInt())
             .costC(input.nextInt())
             .costD(input.nextInt())
-            .costC(input.nextInt())
+            .costE(input.nextInt())
             .build()
 }
