@@ -28,7 +28,7 @@ fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioActi
 
 fun setBasePrio(possibleActions: List<PrioAction>, algo: PrioAlgo) {
 
-    setBasePrioForActionTyp(possibleActions, PrioActionType.WAIT, 10)
+    setBasePrioForActionTyp(possibleActions, PrioActionType.WAIT, -100)
     setBasePrioForActionTyp(possibleActions, PrioActionType.UPLOAD_SAMPLE, 20)
     setBasePrioForActionTyp(possibleActions, PrioActionType.DIAGNOSE_SAMPLE, 110)
     setBasePrioForActionTyp(possibleActions, PrioActionType.GET_DIAGNOSED_SAMPLE, 15)
