@@ -67,10 +67,14 @@ class PrioAlgo {
 
             PrioActionType.GET_DIAGNOSED_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
                     Action(ActionType.CONNECT, prioAction.sampleId)
-            )
+            ) { numCarriedSamples += 1}
+
+            PrioActionType.UPLOAD_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
+                    Action(ActionType.CONNECT, prioAction.sampleId)
+            ) { numCarriedSamples -= 1}
 
             PrioActionType.WAIT -> Action(ActionType.WAIT)
-            PrioActionType.UPLOAD_SAMPLE -> TODO()
+
 
         }
     }
@@ -118,6 +122,12 @@ class PrioAlgo {
                 .map { PrioAction(PrioActionType.DIAGNOSE_SAMPLE, it.sampleId) }
                 .toList()
 
+        val storeSample = state.samples
+                .filter { it.carriedBy == Carrier.ME }
+                .filter { diagnosedSamples.contains(it.sampleId) }
+                .map { PrioAction(PrioActionType.UPLOAD_SAMPLE, it.sampleId) }
+                .toList()
+
         val pickupDiagnosed = if (numCarriedSamples < 3) {
             state.samples
                     .filter { it.carriedBy == Carrier.CLOUD }
@@ -136,7 +146,7 @@ class PrioAlgo {
 
         val others = listOf(PrioAction(PrioActionType.WAIT))
 
-        return listOf(getMolecules, getSamples, diagnoseSample, produceMedicine, others).flatten()
+        return listOf(getMolecules, getSamples, diagnoseSample, produceMedicine, storeSample, pickupDiagnosed, others).flatten()
     }
 
     private fun hasEnoughMoleculesForSample(sample: Sample) =
