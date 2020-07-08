@@ -1,14 +1,9 @@
 package lifegame.prio
 
 import lifegame.PrioAlgo
-import lifegame.container.ActionType
 import lifegame.container.Carrier
-import lifegame.container.Location
 import lifegame.prio.base.PrioAction
-import lifegame.prio.base.PrioActionSubType
 import lifegame.prio.base.PrioActionType
-import lifegame.util.getMoleculeTypes
-import java.lang.IllegalArgumentException
 
 
 fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioAction> {
@@ -22,8 +17,25 @@ fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioActi
 
     PrioNewSamples(algo.state, algo).prioritizeNewSamples(possibleActions.filter { it.prioActionType == PrioActionType.GET_NEW_SAMPLE })
 
+    if(carryingTwoUndiagnosedSamples(algo)) {
+        possibleActions
+                .filter { it.prioActionType == PrioActionType.DIAGNOSE_SAMPLE }
+                .forEach { it.prioChange("twoUndiagnosed", 5) }
+    }
+
 
     return possibleActions
+}
+
+fun carryingTwoUndiagnosedSamples(algo: PrioAlgo): Boolean {
+
+    if(algo.numCarriedSamples == 3) {
+        return algo.state.samples
+                .filter { it.carriedBy == Carrier.ME }
+                .filter { algo.diagnosedSamples.contains(it.sampleId) }
+                .size == 1
+    }
+    return false
 }
 
 fun setBasePrio(possibleActions: List<PrioAction>, algo: PrioAlgo) {
@@ -32,6 +44,7 @@ fun setBasePrio(possibleActions: List<PrioAction>, algo: PrioAlgo) {
     setBasePrioForActionTyp(possibleActions, PrioActionType.UPLOAD_SAMPLE, 20)
     setBasePrioForActionTyp(possibleActions, PrioActionType.DIAGNOSE_SAMPLE, 110)
     setBasePrioForActionTyp(possibleActions, PrioActionType.GET_DIAGNOSED_SAMPLE, 15)
+    setBasePrioForActionTyp(possibleActions, PrioActionType.PRODUCE_MEDICINE, 120)
 
 }
 

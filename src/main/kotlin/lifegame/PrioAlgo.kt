@@ -12,7 +12,7 @@ class PrioAlgo {
 
     // algo state
     internal val diagnosedSamples: MutableSet<Int> = mutableSetOf()
-    private var numCarriedSamples = 0
+    internal var numCarriedSamples = 0
     private var numCarriedMolecules = 0
 
     // round state
@@ -154,7 +154,7 @@ class PrioAlgo {
     }
 
     private fun hasEnoughMoleculesForSample(sample: Sample) =
-            getMoleculeTypes().none { state.me.getStorageOfType(it) < sample.getCostOfType(it) }
+            getMoleculeTypes().none { state.me.getStorageOfType(it) < (sample.getCostOfType(it) - state.me.getExpertizeOfType(it)) }
 
 
 }
