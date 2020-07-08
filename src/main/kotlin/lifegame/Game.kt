@@ -24,7 +24,8 @@ fun main() {
         if(printDebug) {
 //            debug(roundState.me.toString())
 //            debug(roundState.me.toString())
-           // roundState.samples.forEach { debug(it.toString()) }
+
+            roundState.samples.forEach { debug(it.toString()) }
         }
 
         // get
