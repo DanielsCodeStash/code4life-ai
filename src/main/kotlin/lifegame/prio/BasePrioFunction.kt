@@ -17,6 +17,8 @@ fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioActi
 
     PrioNewSamples(algo.state, algo).prioritizeNewSamples(possibleActions.filter { it.prioActionType == PrioActionType.GET_NEW_SAMPLE })
 
+    PrioProduceMedicine(algo.state, algo).prioritizeProduceMedicine(possibleActions.filter { it.prioActionType == PrioActionType.PRODUCE_MEDICINE })
+
     if(carryingTwoUndiagnosedSamples(algo)) {
         possibleActions
                 .filter { it.prioActionType == PrioActionType.DIAGNOSE_SAMPLE }
@@ -45,6 +47,7 @@ fun setBasePrio(possibleActions: List<PrioAction>, algo: PrioAlgo) {
     setBasePrioForActionTyp(possibleActions, PrioActionType.DIAGNOSE_SAMPLE, 110)
     setBasePrioForActionTyp(possibleActions, PrioActionType.GET_DIAGNOSED_SAMPLE, 15)
     setBasePrioForActionTyp(possibleActions, PrioActionType.PRODUCE_MEDICINE, 120)
+    setBasePrioForActionTyp(possibleActions, PrioActionType.GET_MOLECULE, 70)
 
 }
 

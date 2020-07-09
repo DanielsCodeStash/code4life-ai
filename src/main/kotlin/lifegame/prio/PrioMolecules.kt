@@ -20,6 +20,7 @@ class PrioMolecules (
         addPrioOfEnemyNeedsItTo(getMoleculeActions)
 
         addPrioIfLowOnType(getMoleculeActions)
+
     }
 
     private fun addPrioIfLowOnType(possibleActions: List<PrioAction>) {
@@ -29,32 +30,31 @@ class PrioMolecules (
                 .forEach { it.prioChange("lowInStock", 1) }
     }
 
-    private fun enemySamples() = state.samples
-            .filter { it.carriedBy == Carrier.ENEMY }
-            .toList()
-
     private fun addPrioOfEnemyNeedsItTo(possibleActions: List<PrioAction>) {
         possibleActions
                 .filter {enemyNeedMoleculeOfType(possibleActions, it.prioActionSubType)}
                 .forEach { it.prioChange("enemyNeed", 1) }
     }
 
-    private fun enemyNeedMoleculeOfType(possibleActions: List<PrioAction>, type: PrioActionSubType): Boolean {
+    private fun enemyNeedMoleculeOfType(possibleActions: List<PrioAction>, subType: PrioActionSubType): Boolean {
+
+        val type = subType.toTypeString()
+
         return state.samples
                 .filter { it.carriedBy == Carrier.ENEMY }
-                .any{it.getCostOfType(type.toTypeString()) > 0}
+                .any{it.getCostOfType(type)-state.enemy.getExpertizeOfType(type) > state.enemy.getStorageOfType(type)}
     }
 
     private fun addIfWeNeedMoleculesOfThatTypeForSamples(possibleActions: List<PrioAction>) {
 
         possibleActions
                 .filter { weNeedTypeForSamples(it) }
-                .forEach { it.prioChange("typeNeeded",10) }
+                .forEach { it.prioChange("typeNeeded",30) }
 
     }
 
     private fun weNeedTypeForSamples(action: PrioAction) =
-            numNeededForAllSamples(action.prioActionSubType) > numCarried(action.prioActionSubType)
+            numNeededForAllSamples(action.prioActionSubType) - state.me.getExpertizeOfType(action.prioActionSubType.toTypeString()) > numCarried(action.prioActionSubType)
 
     private fun addPrioIfWeAlreadyHaveMoleculesForTheSample(possibleActions: List<PrioAction>) {
         possibleActions

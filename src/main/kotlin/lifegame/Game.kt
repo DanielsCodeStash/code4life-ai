@@ -22,10 +22,11 @@ fun main() {
 
         // debug
         if(printDebug) {
-//            debug(roundState.me.toString())
-//            debug(roundState.me.toString())
+//          debug(roundState.me.toString())
+//          debug(roundState.me.toString())
+            //roundState.samples.forEach { debug(it.toString()) }
+            debugSamples(roundState)
 
-            roundState.samples.forEach { debug(it.toString()) }
         }
 
         // get
@@ -37,6 +38,42 @@ fun main() {
             println(action.verb.toString() + " " + action.thing)
         }
     }
+}
+
+fun debugSamples(roundState: RoundState) {
+
+    val totalMoleculesCarried = getMoleculeTypes()
+            .map { roundState.me.getStorageOfType(it) }
+            .sum()
+
+    var out: String = "    A B C D E = $totalMoleculesCarried\n"
+
+    val storage = getMoleculeTypes()
+            .map { roundState.me.getStorageOfType(it) }
+            .joinToString(" ")
+
+    val expertise = getMoleculeTypes()
+            .map {roundState.me.getExpertizeOfType(it)}
+            .joinToString(" ")
+
+    out += "e   $expertise\n"
+    out += "s   $storage\n"
+    out += "-------------\n"
+
+    roundState.samples
+            .filter { it.carriedBy == Carrier.ME }
+            .filter { it.costA != -1 }
+            .forEach {
+                sample ->
+                out += if(sample.sampleId < 10) " " else ""
+                out += "${sample.sampleId}: "
+                out += getMoleculeTypes()
+                    .map {sample.getCostOfType(it)}
+                    .joinToString ( " " )
+                out += "\n"
+            }
+
+    debug(out)
 }
 
 fun readRoundState(input: Scanner): RoundState {

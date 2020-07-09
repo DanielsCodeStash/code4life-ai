@@ -1,5 +1,10 @@
 # code4life-ai
 
+Take remaining into medicine pick
+
+seed: seed=768411568
+player: BrunoNeves1
+
 SMARTLY PUT IN STUFF IN LABRATORY (2 not 1)
 
 

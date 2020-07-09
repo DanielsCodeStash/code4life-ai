@@ -11,14 +11,14 @@ fun main(args: Array<String>) {
 
     val inFile = File(args[0])
 
-    val outFile = File("out/OutFixed.kt")
+    val outFile = File(args[1])
     val writer = PrintWriter(outFile)
     writer.print("")
 
     val lines = inFile.readLines()
     val defaultImports = lines.filter { it.startsWith("import ") }
 
-    val newImports = fixImports(defaultImports, args[1])
+    val newImports = fixImports(defaultImports, args[2])
     val linesWithoutImports = lines.filter { !it.startsWith("import ") }
 
     val newFileLines = mutableListOf<String>()
