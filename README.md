@@ -1,5 +1,12 @@
 # code4life-ai
 
+
+when stuck, drop more than one sample to find a good one
+prioritise down getting new samples as round 200 approaches
+prioritize getting molecules for samples you can actually finnish
+
+
+
 Take remaining into medicine pick
 
 seed: seed=768411568

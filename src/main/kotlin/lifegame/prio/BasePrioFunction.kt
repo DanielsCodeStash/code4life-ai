@@ -10,9 +10,6 @@ fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioActi
 
     setBasePrio(possibleActions, algo)
 
-
-    PrioDistance(algo.state, algo).addDistanceFactor(possibleActions)
-
     PrioMolecules(algo.state, algo).prioritizeMolecules(possibleActions.filter { it.prioActionType == PrioActionType.GET_MOLECULE })
 
     PrioNewSamples(algo.state, algo).prioritizeNewSamples(possibleActions.filter { it.prioActionType == PrioActionType.GET_NEW_SAMPLE })
@@ -25,6 +22,8 @@ fun prioritize(possibleActions: List<PrioAction>, algo: PrioAlgo): List<PrioActi
                 .forEach { it.prioChange("twoUndiagnosed", 5) }
     }
 
+
+    PrioDistance(algo.state, algo).addDistanceFactor(possibleActions)
 
     return possibleActions
 }

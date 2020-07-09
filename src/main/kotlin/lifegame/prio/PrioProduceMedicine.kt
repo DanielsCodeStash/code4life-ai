@@ -61,7 +61,7 @@ class PrioProduceMedicine (
                 .forEach { analyze(it) }
 
         analyzedResult
-                .sortWith(compareByDescending { it.numMedicines } )
+                .sortWith(compareByDescending<OrderResult>{it.numMedicines}.thenByDescending{it.numRemainingMolecules})
 
         val best = analyzedResult.first()
 
