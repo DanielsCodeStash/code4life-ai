@@ -4,4 +4,4 @@ fun debug(out: String) {
     System.err.println(out)
 }
 
-fun getMoleculeTypes() =  listOf("A", "B", "C", "D", "E")
+fun getMoleculeTypes() = listOf("A", "B", "C", "D", "E")

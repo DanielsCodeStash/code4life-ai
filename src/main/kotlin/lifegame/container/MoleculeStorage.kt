@@ -8,7 +8,7 @@ data class MoleculeStorage(
         val E: Int
 ) {
     fun getAvailableByType(type: String): Int {
-        when(type) {
+        when (type) {
             "A" -> return A
             "B" -> return B
             "C" -> return C

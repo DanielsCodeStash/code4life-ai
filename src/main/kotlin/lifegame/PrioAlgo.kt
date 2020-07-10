@@ -9,13 +9,7 @@ import lifegame.util.getMoleculeTypes
 
 class PrioAlgo {
 
-    // algo state
-    private val prioFunction = BasePrioFunction(this)
-    internal val diagnosedSamples: MutableSet<Int> = mutableSetOf()
-    internal var numCarriedSamples = 0
-
-    // round state
-    internal lateinit var state: RoundState
+    private lateinit var state: RoundState
 
     fun getTurnAction(state: RoundState): Action {
 
@@ -25,7 +19,9 @@ class PrioAlgo {
 
         val possibleActions = getAllPossibleActions()
 
-        val nextAction = prioFunction.prioritize(possibleActions).maxBy { it.prio }!!
+        val nextAction = BasePrioFunction(state)
+                .prioritize(possibleActions)
+                .maxBy { it.prio }!!
 
         return getActualAction(nextAction)
     }
@@ -35,40 +31,28 @@ class PrioAlgo {
 
             PrioActionType.GET_NEW_SAMPLE -> gotoOrAct(Location.SAMPLES,
                     Action(ActionType.CONNECT, prioAction.prioActionSubType.toRankString())
-            ) { numCarriedSamples += 1 }
+            )
 
             PrioActionType.DIAGNOSE_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
                     Action(ActionType.CONNECT, prioAction.sampleId)
-            ) {
-                diagnosedSamples.add(prioAction.sampleId)
-            }
-
+            )
             PrioActionType.GET_MOLECULE -> gotoOrAct(Location.MOLECULES,
                     Action(ActionType.CONNECT, prioAction.prioActionSubType.toString())
             )
 
             PrioActionType.PRODUCE_MEDICINE -> gotoOrAct(Location.LABORATORY,
                     Action(ActionType.CONNECT, prioAction.sampleId)
-            ) { numCarriedSamples -= 1 }
+            )
 
             PrioActionType.GET_DIAGNOSED_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
                     Action(ActionType.CONNECT, prioAction.sampleId)
-            ) { numCarriedSamples += 1}
+            )
 
             PrioActionType.UPLOAD_SAMPLE -> gotoOrAct(Location.DIAGNOSIS,
                     Action(ActionType.CONNECT, prioAction.sampleId)
-            ) { numCarriedSamples -= 1}
+            )
 
             PrioActionType.WAIT -> Action(ActionType.WAIT)
-        }
-    }
-
-    private fun gotoOrAct(location: Location, action: Action, onAction: () -> Unit): Action {
-        return if (state.me.location != location || state.me.eta != 0) {
-            Action(ActionType.GOTO, location)
-        } else {
-            onAction()
-            action
         }
     }
 
@@ -96,7 +80,7 @@ class PrioAlgo {
             emptyList()
         }
 
-        val getSamples = if (numCarriedSamples < 3) {
+        val getSamples = if (state.numSamplesICarry() < 3) {
             listOf(PrioActionSubType.RANK_1, PrioActionSubType.RANK_2, PrioActionSubType.RANK_3)
                     .map { PrioAction(PrioActionType.GET_NEW_SAMPLE, it) }
                     .toList()
@@ -104,19 +88,15 @@ class PrioAlgo {
             emptyList()
         }
 
-        val diagnoseSample = state.samples
-                .filter { it.carriedBy == Carrier.ME }
-                .filter { !diagnosedSamples.contains(it.sampleId) }
+        val diagnoseSample = state.myUndiagnosedSamples()
                 .map { PrioAction(PrioActionType.DIAGNOSE_SAMPLE, it.sampleId) }
                 .toList()
 
-        val storeSample = state.samples
-                .filter { it.carriedBy == Carrier.ME }
-                .filter { diagnosedSamples.contains(it.sampleId) }
+        val storeSample = state.myDiagnosedSamples()
                 .map { PrioAction(PrioActionType.UPLOAD_SAMPLE, it.sampleId) }
                 .toList()
 
-        val pickupDiagnosed = if (numCarriedSamples < 3) {
+        val pickupDiagnosed = if (state.numSamplesICarry() < 3) {
             state.samples
                     .filter { it.carriedBy == Carrier.CLOUD }
                     .map { PrioAction(PrioActionType.GET_DIAGNOSED_SAMPLE, it.sampleId) }
@@ -125,10 +105,7 @@ class PrioAlgo {
             emptyList()
         }
 
-        val produceMedicine = state.samples
-                .asSequence()
-                .filter { it.carriedBy == Carrier.ME }
-                .filter { diagnosedSamples.contains(it.sampleId) }
+        val produceMedicine = state.myDiagnosedSamples()
                 .filter { hasEnoughMoleculesForSample(it) }
                 .map { PrioAction(PrioActionType.PRODUCE_MEDICINE, it.sampleId) }
                 .toList()

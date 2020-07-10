@@ -18,7 +18,7 @@ enum class PrioActionSubType {
     }
 
     fun toRankString(): String {
-        return when(this){
+        return when (this) {
             RANK_1 -> "1"
             RANK_2 -> "2"
             RANK_3 -> "3"
@@ -27,7 +27,7 @@ enum class PrioActionSubType {
     }
 
     fun toTypeString(): String {
-        return when(this){
+        return when (this) {
             A -> "A"
             B -> "B"
             C -> "C"

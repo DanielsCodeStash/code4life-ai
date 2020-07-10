@@ -8,9 +8,8 @@ import lifegame.prio.base.PrioActionSubType
 import lifegame.util.getMoleculeTypes
 import kotlin.math.roundToInt
 
-class PrioNewSamples (
-        private val state:RoundState,
-        private val algo:PrioAlgo
+class PrioNewSamples(
+        private val state: RoundState
 ) {
     fun prioritizeNewSamples(getNewSampleActions: List<PrioAction>) {
 
@@ -25,20 +24,19 @@ class PrioNewSamples (
                 .forEach { it.prio = baseSamplePrio }
 
         val totalExpertize = getMoleculeTypes()
-                .map { algo.state.me.getExpertizeOfType(it) }
+                .map { state.me.getExpertizeOfType(it) }
                 .sum()
 
         getNewSampleActions
                 .filter { it.prioActionSubType == PrioActionSubType.RANK_1 }
-                .forEach { it.prioChange("expertizeChange", breakpointForRank2-totalExpertize*2) }
+                .forEach { it.prioChange("expertizeChange", breakpointForRank2 - totalExpertize * 2) }
 
         getNewSampleActions
                 .filter { it.prioActionSubType == PrioActionSubType.RANK_3 }
-                .forEach { it.prioChange("expertizeChange", (-20+(totalExpertize*1.5)).roundToInt()) }
+                .forEach { it.prioChange("expertizeChange", (-20 + (totalExpertize * 1.5)).roundToInt()) }
 
 
-        val carriedSampleRanks = algo.state.samples
-                .filter { it.carriedBy == Carrier.ME }
+        val carriedSampleRanks = state.mySamples()
                 .map { it.rank }
                 .toList()
 
@@ -49,7 +47,7 @@ class PrioNewSamples (
         getNewSampleActions
                 .forEach {
                     if (it.prio > maxSamplePrio) it.prio = maxSamplePrio
-                    if(it.prio < minSamplePrio) it.prio = minSamplePrio
+                    if (it.prio < minSamplePrio) it.prio = minSamplePrio
                 }
     }
 }

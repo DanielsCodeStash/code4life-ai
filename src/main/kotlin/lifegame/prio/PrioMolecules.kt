@@ -7,9 +7,8 @@ import lifegame.prio.base.PrioAction
 import lifegame.prio.base.PrioActionSubType
 import lifegame.prio.base.PrioActionType
 
-class PrioMolecules (
-        private val state: RoundState,
-        private val algo: PrioAlgo
+class PrioMolecules(
+        private val state: RoundState
 ) {
     fun prioritizeMolecules(getMoleculeActions: List<PrioAction>) {
 
@@ -26,13 +25,13 @@ class PrioMolecules (
     private fun addPrioIfLowOnType(possibleActions: List<PrioAction>) {
         possibleActions
                 .filter { weNeedTypeForSamples(it) }
-                .filter { state.storage.getAvailableByType(it.prioActionSubType.toTypeString()) < 2}
+                .filter { state.storage.getAvailableByType(it.prioActionSubType.toTypeString()) < 2 }
                 .forEach { it.prioChange("lowInStock", 1) }
     }
 
     private fun addPrioOfEnemyNeedsItTo(possibleActions: List<PrioAction>) {
         possibleActions
-                .filter {enemyNeedMoleculeOfType(possibleActions, it.prioActionSubType)}
+                .filter { enemyNeedMoleculeOfType(possibleActions, it.prioActionSubType) }
                 .forEach { it.prioChange("enemyNeed", 1) }
     }
 
@@ -40,16 +39,15 @@ class PrioMolecules (
 
         val type = subType.toTypeString()
 
-        return state.samples
-                .filter { it.carriedBy == Carrier.ENEMY }
-                .any{it.getCostOfType(type)-state.enemy.getExpertizeOfType(type) > state.enemy.getStorageOfType(type)}
+        return state.enemyDiagnosedSamples()
+                .any { it.getCostOfType(type) - state.enemy.getExpertizeOfType(type) > state.enemy.getStorageOfType(type) }
     }
 
     private fun addIfWeNeedMoleculesOfThatTypeForSamples(possibleActions: List<PrioAction>) {
 
         possibleActions
                 .filter { weNeedTypeForSamples(it) }
-                .forEach { it.prioChange("typeNeeded",30) }
+                .forEach { it.prioChange("typeNeeded", 30) }
 
     }
 
@@ -65,15 +63,13 @@ class PrioMolecules (
             state.me.getStorageOfType(prioActionSubType.toTypeString())
 
     private fun numNeededForAllSamples(prioActionSubType: PrioActionSubType) =
-            state.samples
-                    .filter { it.carriedBy == Carrier.ME && algo.diagnosedSamples.contains(it.sampleId) }
+            state.myDiagnosedSamples()
                     .map { it.getCostOfType(prioActionSubType.toTypeString()) }
                     .sum()
 
     // for a given type, how many more molecules in total do we need to complete all samples?
     private fun getNumMoleculesNeededOfTypeForAllCarriedSamples(subType: PrioActionSubType) =
-            state.samples
-                    .filter { it.carriedBy == Carrier.ME && algo.diagnosedSamples.contains(it.sampleId) }
+            state.myDiagnosedSamples()
                     .map { it.getCostOfType(subType.toTypeString()) - state.me.getStorageOfType(subType.toTypeString()) }
                     .filter { it > 0 }
                     .sum()

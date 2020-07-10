@@ -12,7 +12,7 @@ class PrioAction(
     var prio: Int = 100
 
     fun prioChange(description: String, effect: Int) {
-        if(effect == 0)
+        if (effect == 0)
             return
 
         prioFactors.add(PrioFactor(description, effect))
@@ -20,11 +20,11 @@ class PrioAction(
     }
 
     override fun toString(): String {
-        val subType = if(prioActionSubType != PrioActionSubType.NONE) " - $prioActionSubType" else ""
+        val subType = if (prioActionSubType != PrioActionSubType.NONE) " - $prioActionSubType" else ""
 
         return "$prio -> $prioActionType $subType " +
                 prioFactors
-                .joinToString (", ") {it.description + ": " + it.factor}
+                        .joinToString(", ") { it.description + ": " + it.factor }
 
     }
 }

@@ -2,7 +2,7 @@ package lifegame.container
 
 import java.lang.RuntimeException
 
-data class Player private constructor (
+data class Player private constructor(
         val location: Location,
         val eta: Int,
         val scoreHealth: Int,
@@ -50,7 +50,7 @@ data class Player private constructor (
     }
 
     fun getStorageOfType(type: String): Int {
-        when(type) {
+        when (type) {
             "A" -> return storageA
             "B" -> return storageB
             "C" -> return storageC
@@ -61,7 +61,7 @@ data class Player private constructor (
     }
 
     fun getExpertizeOfType(type: String): Int {
-        when(type) {
+        when (type) {
             "A" -> return expertiseA
             "B" -> return expertiseB
             "C" -> return expertiseC

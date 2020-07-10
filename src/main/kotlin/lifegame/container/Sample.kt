@@ -17,26 +17,27 @@ data class Sample private constructor(
 ) {
 
     data class Builder(
-                var sampleId: Int = -1,
-                var carriedBy: Carrier = Carrier.CLOUD,
-                var rank: Int = -1,
-                var expertiseGain: String = "",
-                var health: Int = -1,
-                var costA: Int = -1,
-                var costB: Int = -1,
-                var costC: Int = -1,
-                var costD: Int = -1,
-                var costE: Int = -1
-        ) {
+            var sampleId: Int = -1,
+            var carriedBy: Carrier = Carrier.CLOUD,
+            var rank: Int = -1,
+            var expertiseGain: String = "",
+            var health: Int = -1,
+            var costA: Int = -1,
+            var costB: Int = -1,
+            var costC: Int = -1,
+            var costD: Int = -1,
+            var costE: Int = -1
+    ) {
         fun sampleId(sampleId: Int) = apply { this.sampleId = sampleId }
         fun carriedBy(carriedBy: Int) = apply()
         {
-            when(carriedBy) {
+            when (carriedBy) {
                 -1 -> this.carriedBy = Carrier.CLOUD
-                0 -> this.carriedBy =  Carrier.ME
+                0 -> this.carriedBy = Carrier.ME
                 1 -> this.carriedBy = Carrier.ENEMY
             }
         }
+
         fun rank(rank: Int) = apply { this.rank = rank }
         fun expertiseGain(expertiseGain: String) = apply { this.expertiseGain = expertiseGain }
         fun health(health: Int) = apply { this.health = health }
@@ -47,8 +48,9 @@ data class Sample private constructor(
         fun costE(costE: Int) = apply { this.costE = costE }
         fun build() = Sample(sampleId, carriedBy, rank, expertiseGain, health, costA, costB, costC, costD, costE)
     }
+
     fun getCostOfType(type: String): Int {
-        when(type) {
+        when (type) {
             "A" -> return costA
             "B" -> return costB
             "C" -> return costC

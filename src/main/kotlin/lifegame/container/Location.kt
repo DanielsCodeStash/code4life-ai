@@ -7,7 +7,7 @@ enum class Location {
 
     fun distanceTo(location: Location): Int {
 
-        if(this == location) return 0
+        if (this == location) return 0
 
         when {
             this == START_POS -> {
@@ -17,7 +17,7 @@ enum class Location {
                 return 3
             }
             this == DIAGNOSIS -> {
-                return when(location) {
+                return when (location) {
                     SAMPLES -> 3
                     MOLECULES -> 3
                     LABORATORY -> 4
@@ -28,7 +28,7 @@ enum class Location {
                 return 3
             }
             this == LABORATORY -> {
-                return when(location) {
+                return when (location) {
                     SAMPLES -> 3
                     DIAGNOSIS -> 4
                     MOLECULES -> 3
