@@ -17,14 +17,14 @@ class PrioAlgo {
 
     // round state
     internal lateinit var state: RoundState
-    internal lateinit var lastRoundAction: Action
+    private lateinit var lastRoundAction: Action
 
     fun getTurnAction(state: RoundState): Action {
 
         this.state = state
 
         if (state.me.eta != 0) {
-            return lastRoundAction
+            return Action(ActionType.WAIT)
         }
 
         numCarriedMolecules = getMoleculeTypes()
