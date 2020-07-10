@@ -67,16 +67,6 @@ class PrioProduceMedicine (
 
         var prioAdjust = 0
 
-        analyzedResult
-                .forEach {
-                    var out = it.permutation.joinToString (",")
-                    out += " - num med: " + it.numMedicines + ", remaining: " + it.numRemainingMolecules
-                    debug(out)
-                }
-
-        debug("best perm: " + best.permutation
-                .joinToString (","))
-
         best.permutation
                 .map { getActionForSampleId(it, produceActions) }
                 .forEach {

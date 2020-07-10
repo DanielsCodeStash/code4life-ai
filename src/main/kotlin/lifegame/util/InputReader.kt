@@ -1,10 +1,15 @@
 package lifegame.util
 
-import lifegame.container.Location
-import lifegame.container.MoleculeStorage
-import lifegame.container.Player
-import lifegame.container.Sample
+import lifegame.container.*
 import java.util.*
+
+fun readRoundState(input: Scanner, roundNum: Int): RoundState {
+    val me = readPlayer(input)
+    val enemy = readPlayer(input)
+    val moleculeStorage = readMoleculeStorage(input)
+    val sampleList = readSamples(input)
+    return RoundState(roundNum, me, enemy, sampleList, moleculeStorage)
+}
 
 fun readPlayer(input: Scanner): Player {
 
@@ -27,7 +32,6 @@ fun readPlayer(input: Scanner): Player {
 
 fun readProjects(input: Scanner) {
     val projectCount = input.nextInt()
-
 
     for (i in 0 until projectCount) {
         val a = input.nextInt()

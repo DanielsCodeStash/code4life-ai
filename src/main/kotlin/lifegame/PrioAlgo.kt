@@ -1,51 +1,33 @@
 package lifegame
 
 import lifegame.container.*
+import lifegame.prio.BasePrioFunction
 import lifegame.prio.base.PrioAction
 import lifegame.prio.base.PrioActionSubType
 import lifegame.prio.base.PrioActionType
-import lifegame.prio.prioritize
-import lifegame.util.debug
 import lifegame.util.getMoleculeTypes
 
 class PrioAlgo {
 
     // algo state
+    private val prioFunction = BasePrioFunction(this)
     internal val diagnosedSamples: MutableSet<Int> = mutableSetOf()
     internal var numCarriedSamples = 0
-    private var numCarriedMolecules = 0
 
     // round state
     internal lateinit var state: RoundState
-    private lateinit var lastRoundAction: Action
 
     fun getTurnAction(state: RoundState): Action {
 
         this.state = state
 
-        if (state.me.eta != 0) {
-            return Action(ActionType.WAIT)
-        }
+        if (state.me.eta != 0) return Action(ActionType.WAIT)
 
-        numCarriedMolecules = getMoleculeTypes()
-                .map { state.me.getStorageOfType(it) }
-                .sum()
+        val possibleActions = getAllPossibleActions()
 
-        val possibleActions = getPossibleActions()
+        val nextAction = prioFunction.prioritize(possibleActions).maxBy { it.prio }!!
 
-        val prioritizedActions = prioritize(possibleActions, this).sortedByDescending { it.prio }
-
-        val action = prioritizedActions.first()
-
-        prioritizedActions.forEach { debug(it.toString()) }
-
-        val actualAction = getActualAction(action)
-
-        debug("Doing $actualAction")
-
-        lastRoundAction = actualAction
-
-        return actualAction
+        return getActualAction(nextAction)
     }
 
     private fun getActualAction(prioAction: PrioAction): Action {
@@ -78,8 +60,6 @@ class PrioAlgo {
             ) { numCarriedSamples -= 1}
 
             PrioActionType.WAIT -> Action(ActionType.WAIT)
-
-
         }
     }
 
@@ -100,7 +80,11 @@ class PrioAlgo {
         }
     }
 
-    private fun getPossibleActions(): List<PrioAction> {
+    private fun getAllPossibleActions(): List<PrioAction> {
+
+        val numCarriedMolecules = getMoleculeTypes()
+                .map { state.me.getStorageOfType(it) }
+                .sum()
 
         val getMolecules = if (numCarriedMolecules < 10) {
 
@@ -142,6 +126,7 @@ class PrioAlgo {
         }
 
         val produceMedicine = state.samples
+                .asSequence()
                 .filter { it.carriedBy == Carrier.ME }
                 .filter { diagnosedSamples.contains(it.sampleId) }
                 .filter { hasEnoughMoleculesForSample(it) }

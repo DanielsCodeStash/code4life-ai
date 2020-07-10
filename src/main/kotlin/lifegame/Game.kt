@@ -15,26 +15,24 @@ fun main() {
 
     // game loop
     while (true) {
-        roundNum++
 
-        // read
-        val roundState = readRoundState(input)
+        // read state
+        val roundState = readRoundState(input, ++roundNum)
 
         // debug
-        if(printDebug) {
+        if (printDebug) {
             // debug(roundState.me.toString())
             // debug(roundState.me.toString())
             // roundState.samples.forEach { debug(it.toString()) }
             debugSamples(roundState)
-
         }
 
-        // get
+        // get next action
         val action = algo.getTurnAction(roundState)
 
         // output
-        if(action.verb != ActionType.NONE) {
-            if(action.verb == ActionType.WAIT) {
+        if (action.verb != ActionType.NONE) {
+            if (action.verb == ActionType.WAIT) {
                 println(getTauntMessage(roundState))
             } else {
                 println(action.verb.toString() + " " + action.thing)
@@ -47,7 +45,7 @@ fun getTauntMessage(roundState: RoundState): String {
 
     val weAreWinning = roundState.me.scoreHealth >= roundState.enemy.scoreHealth
 
-    return if(weAreWinning) {
+    return if (weAreWinning) {
         when ((0..7).random()) {
             1 -> "You lose nub"
             2 -> "LUUUUHUUSER"
@@ -83,7 +81,7 @@ fun debugSamples(roundState: RoundState) {
             .joinToString(" ")
 
     val expertise = getMoleculeTypes()
-            .map {roundState.me.getExpertizeOfType(it)}
+            .map { roundState.me.getExpertizeOfType(it) }
             .joinToString(" ")
 
     out += "e   $expertise\n"
@@ -93,26 +91,18 @@ fun debugSamples(roundState: RoundState) {
     roundState.samples
             .filter { it.carriedBy == Carrier.ME }
             .filter { it.costA != -1 }
-            .forEach {
-                sample ->
-                out += if(sample.sampleId < 10) " " else ""
+            .forEach { sample ->
+                out += if (sample.sampleId < 10) " " else ""
                 out += "${sample.sampleId}: "
                 out += getMoleculeTypes()
-                    .map {sample.getCostOfType(it)}
-                    .joinToString ( " " )
+                        .map { sample.getCostOfType(it) }
+                        .joinToString(" ")
                 out += "\n"
             }
 
     debug(out)
 }
 
-fun readRoundState(input: Scanner): RoundState {
-    val me = readPlayer(input)
-    val enemy = readPlayer(input)
-    val moleculeStorage = readMoleculeStorage(input)
-    val sampleList = readSamples(input)
-    return RoundState(me, enemy, sampleList, moleculeStorage)
-}
 
 
 
