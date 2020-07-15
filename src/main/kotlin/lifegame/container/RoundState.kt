@@ -5,7 +5,8 @@ data class RoundState(
         val me: Player,
         val enemy: Player,
         val samples: List<Sample>,
-        val storage: MoleculeStorage
+        val storage: MoleculeStorage,
+        val projects: List<Project>
 ) {
     fun mySamples() = samples
             .filter { it.carriedBy == Carrier.ME }

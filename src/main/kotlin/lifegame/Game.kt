@@ -16,13 +16,14 @@ fun main() {
     val algo = PrioAlgo()
     var roundNum = 0
 
-    readProjects(input)
+    val projects= readProjects(input)
+    debug(projects.toString())
 
     // game loop
     while (true) {
 
         // read state
-        val roundState = readRoundState(input, ++roundNum)
+        val roundState = readRoundState(input, projects, ++roundNum)
 
         // debug
         if (printDebug) {

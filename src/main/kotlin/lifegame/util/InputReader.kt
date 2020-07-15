@@ -3,12 +3,12 @@ package lifegame.util
 import lifegame.container.*
 import java.util.*
 
-fun readRoundState(input: Scanner, roundNum: Int): RoundState {
+fun readRoundState(input: Scanner, projects: List<Project>, roundNum: Int): RoundState {
     val me = readPlayer(input)
     val enemy = readPlayer(input)
     val moleculeStorage = readMoleculeStorage(input)
     val sampleList = readSamples(input)
-    return RoundState(roundNum, me, enemy, sampleList, moleculeStorage)
+    return RoundState(roundNum, me, enemy, sampleList, moleculeStorage, projects)
 }
 
 fun readPlayer(input: Scanner): Player {
@@ -30,16 +30,23 @@ fun readPlayer(input: Scanner): Player {
             .build()
 }
 
-fun readProjects(input: Scanner) {
+fun readProjects(input: Scanner): List<Project> {
+    val projects = mutableListOf<Project>()
     val projectCount = input.nextInt()
 
     for (i in 0 until projectCount) {
-        val a = input.nextInt()
-        val b = input.nextInt()
-        val c = input.nextInt()
-        val d = input.nextInt()
-        val e = input.nextInt()
+        val project = Project.Builder()
+                .a(input.nextInt())
+                .b(input.nextInt())
+                .c(input.nextInt())
+                .d(input.nextInt())
+                .e(input.nextInt())
+                .build()
+
+        projects.add(project)
     }
+
+    return projects
 }
 
 fun readMoleculeStorage(input: Scanner): MoleculeStorage {

@@ -30,16 +30,16 @@ class BasePrioFunction(private val state: RoundState) {
 
     private fun setBasePrio(possibleActions: List<PrioAction>) {
 
-        setBasePrioForActionTyp(possibleActions, PrioActionType.WAIT, -100)
-        setBasePrioForActionTyp(possibleActions, PrioActionType.UPLOAD_SAMPLE, 20)
-        setBasePrioForActionTyp(possibleActions, PrioActionType.DIAGNOSE_SAMPLE, 110)
-        setBasePrioForActionTyp(possibleActions, PrioActionType.GET_DIAGNOSED_SAMPLE, 15)
-        setBasePrioForActionTyp(possibleActions, PrioActionType.PRODUCE_MEDICINE, 120)
-        setBasePrioForActionTyp(possibleActions, PrioActionType.GET_MOLECULE, 70)
+        setBasePrioForActionType(possibleActions, PrioActionType.WAIT, -100)
+        setBasePrioForActionType(possibleActions, PrioActionType.UPLOAD_SAMPLE, 20)
+        setBasePrioForActionType(possibleActions, PrioActionType.DIAGNOSE_SAMPLE, 110)
+        setBasePrioForActionType(possibleActions, PrioActionType.GET_DIAGNOSED_SAMPLE, 15)
+        setBasePrioForActionType(possibleActions, PrioActionType.PRODUCE_MEDICINE, 120)
+        setBasePrioForActionType(possibleActions, PrioActionType.GET_MOLECULE, 70)
 
     }
 
-    private fun setBasePrioForActionTyp(possibleActions: List<PrioAction>, actionType: PrioActionType, baseValue: Int) = possibleActions
+    private fun setBasePrioForActionType(possibleActions: List<PrioAction>, actionType: PrioActionType, baseValue: Int) = possibleActions
             .filter { it.prioActionType == actionType }
             .forEach { it.prio = baseValue }
 
