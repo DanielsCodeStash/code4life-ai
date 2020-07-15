@@ -1,16 +1,13 @@
 package lifegame.prio
 
-import lifegame.PrioAlgo
-import lifegame.container.Carrier
 import lifegame.container.RoundState
 import lifegame.prio.base.PrioAction
 import lifegame.prio.base.PrioActionSubType
-import lifegame.prio.base.PrioActionType
 
 class PrioMolecules(
         private val state: RoundState
 ) {
-    fun prioritizeMolecules(getMoleculeActions: List<PrioAction>) {
+    fun prio(getMoleculeActions: List<PrioAction>) {
 
         addIfWeNeedMoleculesOfThatTypeForSamples(getMoleculeActions)
 

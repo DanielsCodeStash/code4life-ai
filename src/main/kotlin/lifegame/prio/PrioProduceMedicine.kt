@@ -1,11 +1,8 @@
 package lifegame.prio
 
-import lifegame.PrioAlgo
-import lifegame.container.Carrier
 import lifegame.container.RoundState
 import lifegame.container.Sample
 import lifegame.prio.base.PrioAction
-import lifegame.util.debug
 import lifegame.util.getMoleculeTypes
 
 class PrioProduceMedicine(
@@ -39,7 +36,7 @@ class PrioProduceMedicine(
 
     private val analyzedResult = mutableListOf<OrderResult>()
 
-    fun prioritizeProduceMedicine(produceActions: List<PrioAction>) {
+    fun prio(produceActions: List<PrioAction>) {
 
         val permutationList = produceActions
                 .filter { state.sampleIsDiagnosed(it.sampleId) }
@@ -106,7 +103,6 @@ class PrioProduceMedicine(
         return true
     }
 
-    // don't look at this, I'll fix later
     private fun generatePermutations(original: List<Int>): List<List<Int>> {
         if (original.isEmpty())
             return emptyList()
@@ -133,7 +129,7 @@ class PrioProduceMedicine(
                         listOf(original[2], original[0], original[1])
                 )
             }
-            else -> throw java.lang.IllegalArgumentException("dontask")
+            else -> throw java.lang.IllegalArgumentException("We only support up to 3")
         }
     }
 }

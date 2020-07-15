@@ -1,7 +1,5 @@
 package lifegame.container
 
-import java.lang.IllegalArgumentException
-
 enum class Location {
     START_POS, LABORATORY, DIAGNOSIS, MOLECULES, SAMPLES;
 

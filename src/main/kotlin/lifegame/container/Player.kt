@@ -1,7 +1,5 @@
 package lifegame.container
 
-import java.lang.RuntimeException
-
 data class Player private constructor(
         val location: Location,
         val eta: Int,

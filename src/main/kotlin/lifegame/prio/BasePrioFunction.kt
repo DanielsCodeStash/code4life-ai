@@ -7,38 +7,26 @@ import lifegame.prio.base.PrioActionType
 
 class BasePrioFunction(private val state: RoundState) {
 
-    fun prioritize(possibleActions: List<PrioAction>): List<PrioAction> {
+    fun prioritize(actions: List<PrioAction>): List<PrioAction> {
 
-        setBasePrio(possibleActions)
+        // base prio
+        setBasePrio(actions)
 
-        PrioMolecules(state).prioritizeMolecules(getActionsOfType(possibleActions, PrioActionType.GET_MOLECULE))
+        // general prio functions
+        PrioMolecules(state).prio(getActionsOfType(actions, PrioActionType.GET_MOLECULE))
+        PrioNewSamples(state).prio(getActionsOfType(actions, PrioActionType.GET_NEW_SAMPLE))
+        PrioProduceMedicine(state).prio(getActionsOfType(actions, PrioActionType.PRODUCE_MEDICINE))
+        PrioDiagnosing(state).prio(getActionsOfType(actions, PrioActionType.DIAGNOSE_SAMPLE))
 
-        PrioNewSamples(state).prioritizeNewSamples(getActionsOfType(possibleActions, PrioActionType.GET_NEW_SAMPLE))
+        // distance factor
+        PrioDistance(state).addDistanceFactor(actions)
 
-        PrioProduceMedicine(state).prioritizeProduceMedicine(getActionsOfType(possibleActions, PrioActionType.PRODUCE_MEDICINE))
-
-        if (carryingTwoUndiagnosedSamples()) {
-            possibleActions
-                    .filter { it.prioActionType == PrioActionType.DIAGNOSE_SAMPLE }
-                    .forEach { it.prioChange("twoUndiagnosed", 5) }
-        }
-
-        PrioDistance(state).addDistanceFactor(possibleActions)
-
-        return possibleActions
+        return actions
     }
 
     private fun getActionsOfType(actions: List<PrioAction>, type: PrioActionType): List<PrioAction> = actions
             .filter { it.prioActionType == type }
             .toList()
-
-    private fun carryingTwoUndiagnosedSamples(): Boolean {
-
-        if (state.numSamplesICarry() == 3) {
-            return state.myDiagnosedSamples().size == 1
-        }
-        return false
-    }
 
     private fun setBasePrio(possibleActions: List<PrioAction>) {
 

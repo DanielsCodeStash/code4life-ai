@@ -1,7 +1,5 @@
 package lifegame.container
 
-import java.lang.IllegalArgumentException
-
 data class RoundState(
         val roundNum: Int,
         val me: Player,

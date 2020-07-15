@@ -1,7 +1,5 @@
 package lifegame.prio
 
-import lifegame.PrioAlgo
-import lifegame.container.Carrier
 import lifegame.container.RoundState
 import lifegame.prio.base.PrioAction
 import lifegame.prio.base.PrioActionSubType
@@ -11,7 +9,7 @@ import kotlin.math.roundToInt
 class PrioNewSamples(
         private val state: RoundState
 ) {
-    fun prioritizeNewSamples(getNewSampleActions: List<PrioAction>) {
+    fun prio(getNewSampleActions: List<PrioAction>) {
 
         val baseSamplePrio = 90
         val maxSamplePrio = 110

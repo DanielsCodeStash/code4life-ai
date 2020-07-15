@@ -1,7 +1,5 @@
 package lifegame.container
 
-import java.lang.RuntimeException
-
 data class Sample private constructor(
 
         val sampleId: Int,

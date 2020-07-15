@@ -1,11 +1,9 @@
 package lifegame.prio
 
-import lifegame.PrioAlgo
 import lifegame.container.Location
 import lifegame.container.RoundState
 import lifegame.prio.base.PrioAction
 import lifegame.prio.base.PrioActionType
-import java.lang.IllegalArgumentException
 
 class PrioDistance(
         private val state: RoundState

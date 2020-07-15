@@ -1,7 +1,12 @@
 package lifegame
 
-import lifegame.container.*
-import lifegame.util.*
+import lifegame.container.ActionType
+import lifegame.container.Carrier
+import lifegame.container.RoundState
+import lifegame.util.debug
+import lifegame.util.getMoleculeTypes
+import lifegame.util.readProjects
+import lifegame.util.readRoundState
 import java.util.*
 
 fun main() {
